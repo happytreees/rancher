@@ -29,6 +29,7 @@ const (
 	SoftLayerDriver    = "softlayer"
 	Vmwaredriver       = "vmwarevsphere"
 	GoogleDriver       = "google"
+	VultrDriver        = "vultr"
 )
 
 var DriverData = map[string]map[string][]string{
@@ -47,6 +48,7 @@ var DriverData = map[string]map[string][]string{
 	SoftLayerDriver:    {"privateCredentialFields": []string{"apiKey"}},
 	Vmwaredriver:       {"publicCredentialFields": []string{"username", "vcenter", "vcenterPort"}, "privateCredentialFields": []string{"password"}},
 	GoogleDriver:       {"privateCredentialFields": []string{"authEncodedJson"}},
+	VultrDriver:        {"privateCredentialFields": []string{"apiKey"}},
 }
 
 var driverDefaults = map[string]map[string]string{
@@ -126,6 +128,11 @@ func addMachineDrivers(management *config.ManagementContext) error {
 	if err := addMachineDriver(SoftLayerDriver, "local://", "", "", nil, false, true, false, management); err != nil {
 		return err
 	}
+
+	if err := addMachineDriver(VultrDriver, "https://github.com/vultr/docker-machine-driver-vultr/releases/download/v2.1.0/docker-machine-driver-vultr", "https://sjc1.vultrobjects.com/rancher-ui/component.js", "", []string{"api.vultr.com", "sjc1.vultrobjects.com"}, false, false, false, management); err != nil {
+		return err
+	}
+
 	return addMachineDriver(Vmwaredriver, "local://", "", "", nil, true, true, false, management)
 }
 
